@@ -45,7 +45,6 @@ from vnpy.event import Event, EventEngine
 from vnpy_rest import Request, RestClient, Response
 from vnpy_websocket import WebsocketClient
 
-
 # 中国时区
 CHINA_TZ = pytz.timezone("Asia/Shanghai")
 
@@ -268,12 +267,12 @@ class BinanceUsdtRestApi(RestClient):
         return request
 
     def connect(
-        self,
-        key: str,
-        secret: str,
-        server: str,
-        proxy_host: str,
-        proxy_port: int
+            self,
+            key: str,
+            secret: str,
+            server: str,
+            proxy_host: str,
+            proxy_port: int
     ) -> None:
         """连接REST服务器"""
         self.key = key
@@ -283,7 +282,7 @@ class BinanceUsdtRestApi(RestClient):
         self.server = server
 
         self.connect_time = (
-            int(datetime.now().strftime("%y%m%d%H%M%S")) * self.order_count
+                int(datetime.now().strftime("%y%m%d%H%M%S")) * self.order_count
         )
 
         if self.server == "REAL":
@@ -502,7 +501,7 @@ class BinanceUsdtRestApi(RestClient):
             account: AccountData = AccountData(
                 accountid=asset["asset"],
                 balance=float(asset["walletBalance"]),
-                frozen=float(asset["walletBalance"])-float(asset["availableBalance"]),
+                frozen=float(asset["walletBalance"]) - float(asset["availableBalance"]),
                 gateway_name=self.gateway_name
             )
 
@@ -608,7 +607,7 @@ class BinanceUsdtRestApi(RestClient):
         self.gateway.write_log(msg)
 
     def on_send_order_error(
-        self, exception_type: type, exception_value: Exception, tb, request: Request
+            self, exception_type: type, exception_value: Exception, tb, request: Request
     ) -> None:
         """委托下单回报函数报错回报"""
         order: OrderData = request.extra
@@ -649,7 +648,7 @@ class BinanceUsdtRestApi(RestClient):
         pass
 
     def on_keep_user_stream_error(
-        self, exception_type: type, exception_value: Exception, tb, request: Request
+            self, exception_type: type, exception_value: Exception, tb, request: Request
     ) -> None:
         """延长listenKey有效期函数报错回报"""
         # 当延长listenKey有效期时，忽略超时报错
@@ -675,7 +674,7 @@ class BinanceUsdtRestApi(RestClient):
             path: str = "/fapi/v1/klines"
             if req.end:
                 end_time = int(datetime.timestamp(req.end))
-                params["endTime"] = end_time * 1000     # 转换成毫秒
+                params["endTime"] = end_time * 1000  # 转换成毫秒
 
             resp: Response = self.request(
                 "GET",
@@ -744,7 +743,7 @@ class BinanceUsdtTradeWebsocketApi(WebsocketClient):
 
     def connect(self, url: str, proxy_host: str, proxy_port: int) -> None:
         """连接Websocket交易频道"""
-        self.init(url, proxy_host, proxy_port)
+        self.init(url, proxy_host, proxy_port, receive_timeout=1800)
         self.start()
 
     def on_connected(self) -> None:
@@ -767,7 +766,7 @@ class BinanceUsdtTradeWebsocketApi(WebsocketClient):
                 frozen=float(acc_data["wb"]) - float(acc_data["cw"]),
                 gateway_name=self.gateway_name
             )
-            #print("--------on_account-------", float(acc_data["wb"]), float(acc_data["cw"]), float(acc_data["bc"]))
+            # print("--------on_account-------", float(acc_data["wb"]), float(acc_data["cw"]), float(acc_data["bc"]))
 
             if account.balance:
                 self.gateway.on_account(account)
@@ -852,10 +851,10 @@ class BinanceUsdtDataWebsocketApi(WebsocketClient):
         self.reqid: int = 0
 
     def connect(
-        self,
-        proxy_host: str,
-        proxy_port: int,
-        server: str
+            self,
+            proxy_host: str,
+            proxy_port: int,
+            server: str
     ) -> None:
         """连接Websocket行情频道"""
         if server == "REAL":
