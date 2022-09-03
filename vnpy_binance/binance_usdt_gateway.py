@@ -704,7 +704,9 @@ class BinanceUsdtRestApi(RestClient):
                         datetime=generate_datetime(row[0]),
                         interval=req.interval,
                         volume=float(row[5]),
-                        turnover=float(row[7]),
+                        turnover=float(row[8]),
+                        open_interest=float(row[9]),
+
                         open_price=float(row[1]),
                         high_price=float(row[2]),
                         low_price=float(row[3]),
@@ -929,7 +931,9 @@ class BinanceUsdtDataWebsocketApi(WebsocketClient):
 
         if channel == "ticker":
             tick.volume = float(data['v'])
-            tick.turnover = float(data['q'])
+            tick.turnover = float(data['n'])
+            tick.open_interest=float(data["V"])
+
             tick.open_price = float(data['o'])
             tick.high_price = float(data['h'])
             tick.low_price = float(data['l'])
